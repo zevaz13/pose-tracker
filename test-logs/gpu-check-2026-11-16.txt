@@ -1,0 +1,7 @@
+GPU check, 2026-11-16 (laptop being refurbished with Linux, Ubuntu 24.04-based)
+Command: lspci | grep -iE 'vga|3d|display'
+00:02.0 VGA compatible controller: Intel Corporation TigerLake-LP GT2 [Iris Xe Graphics] (rev 01)
+01:00.0 Non-Volatile memory controller: Sandisk Corp SanDisk Ultra 3D / WD Blue SN550 NVMe SSD (rev 01)
+Command: nvidia-smi
+Command 'nvidia-smi' not found (apt lists nvidia-utils-* packages as install suggestions; generic message, not evidence of an NVIDIA GPU)
+Interpretation: only GPU = Intel Iris Xe integrated. The "3D" match on line 2 is the SSD. No NVIDIA/CUDA GPU.

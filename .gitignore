@@ -1,0 +1,15 @@
+# Raw and derived data, model weights, environment: large, not for git
+data/
+models/
+.venv/
+
+# Python and notebooks
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Editors and OS
+.vscode/
+.idea/
+*.swp
+.DS_Store

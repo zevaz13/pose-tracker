@@ -1,0 +1,21 @@
+Machine check, 2026-11-16 (Linux laptop, Ubuntu 24.04-based). Commands run by the user, output pasted into chat.
+
+python3 --version                -> Python 3.12.3
+python3 -m venv --help           -> venv-ok
+ffprobe -version                 -> not found (apt suggests: sudo apt install ffmpeg)
+lscpu | grep 'Model name'        -> 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz
+free -h                          -> Mem total 15Gi, used 4.5Gi, free 6.7Gi, buff/cache 4.9Gi, available 10Gi; Swap 0B
+df -h ~                          -> /dev/sda5  228G size, 75G used, 142G avail (35%)
+
+PyPI wheel check (done by Claude, 2026-11-16, from PyPI JSON metadata; compressed wheel sizes, linux x86_64):
+mediapipe 1.2.3          py3-none-manylinux_2_28_x86_64   43.3 MB   (classifiers list Python 3.9-3.14)
+rtmlib 0.0.16            py3-none-any                      0.1 MB   (requires: numpy, onnxruntime, opencv-contrib-python, opencv-python, tqdm)
+onnxruntime 1.32.0       cp312 and cp314 manylinux        27.8 MB
+opencv-python 5.0.0.93   cp37-abi3 manylinux              73.8 MB   (abi3: works on any Python 3.7+)
+numpy 2.5.5              cp312 / cp314                    15.7 MB   (requires Python >= 3.12)
+scipy 1.18.1             cp312 / cp314                    35.3 MB   (requires Python >= 3.12)
+matplotlib 3.11.2        cp312 9.9 MB / cp314 11.0 MB
+openvino 2026.4.1        cp312 / cp314                    59.1 MB   (optional)
+torch 2.15.0             cp312 / cp314                   539.2 MB   (PyPI Linux build also depends on nvidia-cudnn-cu13, nccl, nvshmem, cusparselt, triton: large; use the CPU build instead; Stage 2 only)
+ultralytics 8.4.215      py3-none-any                      1.5 MB   (pulls torch and torchvision)
+Result: every core package has a wheel for Python 3.12 and for 3.14. No fresh Python install needed.
