@@ -1,6 +1,6 @@
 # Pose Tracker (table-tennis strokes from phone video)
 
-Status: PLANNING (2026-11-16). Nothing installed or measured yet. Part of the HobbyProjects backlog (section 8 in `hobby-ideas-backlog.md` in the Claude Project). Setup and run commands are in `docs/WORKFLOW.md`.
+Status: environment ready (2026-11-16). No pose data recorded or measured yet. Part of the HobbyProjects backlog (section 8 in `hobby-ideas-backlog.md` in the Claude Project). Setup and run commands are in `docs/WORKFLOW.md`.
 
 Legend: **[assumed]** = from literature or reasoning, not measured by me. **[verified]** = measured, with raw data in `test-logs/`. Everything below is [assumed] until a test log says otherwise.
 
@@ -91,6 +91,7 @@ Skim for the API shape and the gotchas, then build. Do not read ahead of the sta
 - Oxford comparison (MediaPipe, OpenPose, RTMPose, ViTPose, ...; infant video): https://ora.ox.ac.uk/objects/uuid:ff7ad4b5-3e9f-4d71-819d-15d19154a947/files/rhx11xh38d
 
 ## Log
+- 2026-11-16: Environment set up with uv [verified]: system Python 3.12.3 (no download), mediapipe 1.2.3, rtmlib 0.0.16, onnxruntime 1.32.0 (CPU), OpenCV 5.0.0 (both opencv-python and opencv-contrib-python installed; import works), `.venv` 949 MB. Layout: `src/pose_tracker/` (shared code, editable install), `scripts/` (one CLI per stage), `notebooks/` (concepts and parameter tuning), `models/`. Details in `docs/WORKFLOW.md` section 2.
 - 2026-11-16: Remote `origin` added: private GitHub repo `zevaz13/pose-tracker` (SSH). Created on the web; Sebastian pushes.
 - 2026-11-16: Git repository created (branch `main`, no remote; Sebastian reviews and pushes). `.gitignore` excludes `data/`, `models/`, `.venv/`. Removed the outdated root `WORKFLOW.md` (venv/pip version); `docs/WORKFLOW.md` is the only workflow file. uv 0.12.3 is installed [verified].
 - 2026-11-16 (evening): User reports the remote is paired with the phone and recognized as Volume Up; tablet Bluetooth stays off while the phone is used (tablet not needed much for now). Still untested: whether the camera app records on Volume Up.

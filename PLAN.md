@@ -1,6 +1,6 @@
 # Pose tracker: plan
 
-Current milestone: **M0, environment** (not started; waiting for Sebastian to finish the reading list in `README.md`). Last updated 2026-11-16.
+Current milestone: **M0, environment** (done except the reading list; next: M1 stills). Last updated 2026-11-16.
 
 Rules: tick items as they are done, with the date. Decisions and findings go in `README.md`, commands in `docs/WORKFLOW.md`. Ask before any install, `sudo` or deletion.
 
@@ -10,9 +10,10 @@ Rules: tick items as they are done, with the date. Decisions and findings go in 
 - [ ] Sebastian reads the reading list (`README.md`)
 - [x] Git repository: `git init -b main`, `.gitignore` for data/models/.venv; Sebastian pushes (2026-11-16)
 - [x] Check `uv` is installed: uv 0.12.3 (2026-11-16)
-- [ ] `uv init` + pin Python 3.12; confirm `uv run python --version` shows the system 3.12.3 with no download
-- [ ] Ask, then `uv add` the core packages (`docs/WORKFLOW.md`, section 2); record installed size (`du -sh .venv`)
-- [ ] Import check for cv2, mediapipe, rtmlib, onnxruntime
+- [x] `uv init` + pin Python 3.12; `uv run python --version` = system 3.12.3, no download (2026-11-16)
+- [x] `uv add` core packages + notebook; `.venv` = 949 MB (2026-11-16)
+- [x] Import check for cv2, mediapipe, rtmlib, onnxruntime: OK, CPU provider (2026-11-16)
+- [x] Folders: `src/pose_tracker/`, `scripts/`, `notebooks/`, `models/`, `data/derived/` (2026-11-16)
 
 ## M1: Stage 0, stills
 - [ ] 6-10 photos: side and front, ready position and backhand contact, fixed camera

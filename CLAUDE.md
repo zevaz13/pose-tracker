@@ -16,7 +16,8 @@ Offline stroke analyzer for table tennis. Input: photos and clips from the phone
 - Models: MediaPipe Pose Landmarker and RTMPose via `rtmlib` (ONNX Runtime). Compare both on the same files. YOLO-pose and ViTPose only if those disappoint.
 - Camera: realme GT Neo 3 (RMX3561) on a tripod. Frame-rate tiers to test: 30, 60, 480 fps (480 fps is 720p). Spec sheet values, not yet verified in files. Check every clip with `ffprobe` before trusting the label (command in `docs/WORKFLOW.md`, section 4).
 - Shutter remote: the same Bluetooth remote as page-turner, sends Volume Up. Whether the realme camera app records on it is untested.
-- Not installed yet: the Python environment. Torch, ultralytics and SAM 2 are deferred to Stage 2 (CPU torch build only; check the size first).
+- Environment installed 2026-11-16 (uv, Python 3.12.3, `.venv` 949 MB). Torch, ultralytics and SAM 2 are deferred to Stage 2 (CPU torch build only; check the size first).
+- Code layout: shared code in `src/pose_tracker/` (import as `pose_tracker`), one CLI per stage in `scripts/`, exploration and parameter tuning in `notebooks/`. Notebooks import from `pose_tracker`; settled code moves out of notebooks into `src/`.
 
 ## Python and tooling
 - Use `uv` exclusively for all Python tasks. Never `pip` or `pip3`.
