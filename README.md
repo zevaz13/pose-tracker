@@ -91,6 +91,7 @@ Skim for the API shape and the gotchas, then build. Do not read ahead of the sta
 - Oxford comparison (MediaPipe, OpenPose, RTMPose, ViTPose, ...; infant video): https://ora.ox.ac.uk/objects/uuid:ff7ad4b5-3e9f-4d71-819d-15d19154a947/files/rhx11xh38d
 
 ## Log
+- 2026-11-16: Remote `origin` added: private GitHub repo `zevaz13/pose-tracker` (SSH). Created on the web; Sebastian pushes.
 - 2026-11-16: Git repository created (branch `main`, no remote; Sebastian reviews and pushes). `.gitignore` excludes `data/`, `models/`, `.venv/`. Removed the outdated root `WORKFLOW.md` (venv/pip version); `docs/WORKFLOW.md` is the only workflow file. uv 0.12.3 is installed [verified].
 - 2026-11-16 (evening): User reports the remote is paired with the phone and recognized as Volume Up; tablet Bluetooth stays off while the phone is used (tablet not needed much for now). Still untested: whether the camera app records on Volume Up.
 - 2026-11-16: Phone identified as realme GT Neo 3 (RMX3561): 4K/1080p at 30/60 fps, slow-mo 720p at 480 fps per spec sheets (to be verified on real files). User has a tripod and the Bluetooth shutter remote (for self-recording); tablet is the page-turner Samsung tablet. Frame-rate tiers to test: 30 / 60 / 480.

@@ -60,4 +60,4 @@ One file per stage, so stages can be re-run and compared:
 - Small steps, one test at a time, say what to look for in each result.
 - Use the brainstorming skill whenever we need to set or change a plan, and follow feature-dev guidelines for code generation (if either skill is not available in the session, say so and continue with a short written plan in `PLAN.md`).
 - Use the agent-browser skill for online searches when needed.
-- Git repository since 2026-11-16 (branch `main`, no remote). Make small local commits with descriptive messages; Sebastian reviews and pushes. Never add a remote or push. `.gitignore` keeps `data/`, `models/` and `.venv/` out.
+- Git repository since 2026-11-16 (branch `main`, remote `origin` = private GitHub repo `zevaz13/pose-tracker` over SSH). Make small local commits with descriptive messages; Sebastian reviews and pushes. Never push or change remotes. `.gitignore` keeps `data/`, `models/` and `.venv/` out.
