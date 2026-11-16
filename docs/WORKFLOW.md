@@ -45,7 +45,17 @@ Recreate the environment on another machine or after `rm -rf .venv`: `uv sync`.
 - GPU: none (Intel Iris Xe only, checked 2026-11-16). Use plain `onnxruntime` (CPU). Do not install `onnxruntime-gpu` or NVIDIA packages.
 - System packages: Python 3.12.3 and `venv` are already present (verified). `ffmpeg` was missing and was installed on 2026-11-16 (`sudo apt install ffmpeg`, run by the user); `ffprobe version 6.1.1-3ubuntu5` verified. Nothing else needs `sudo`.
 - Machine facts (verified 2026-11-16, in `test-logs/machine-check-2026-11-16.txt`): i7-1165G7, 15 GiB RAM, 142 GB free.
-- MediaPipe model files (`.task`) are downloaded separately; save them under `models/` (not for git).
+- Model weights live in `models/` (not for git) and are loaded by path, so nothing downloads silently (rtmlib would otherwise cache to `~/.cache/rtmlib`). Downloaded 2026-11-16 (balanced set, 148 MB on disk):
+```
+mkdir -p models/mediapipe models/rtmlib
+curl -sSL -o models/mediapipe/pose_landmarker_full.task \
+  https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/latest/pose_landmarker_full.task   # 9.4 MB
+B=https://download.openmmlab.com/mmpose/v1/projects/rtmposev1/onnx_sdk
+curl -sSL $B/yolox_m_8xb8-300e_humanart-c2c7a14a.zip -o /tmp/det.zip && unzip -p /tmp/det.zip '*/end2end.onnx' > models/rtmlib/yolox_m_humanart.onnx            # 94 MB zip
+curl -sSL $B/rtmpose-m_simcc-body7_pt-body7_420e-256x192-e48f03d0_20230504.zip -o /tmp/pose.zip && unzip -p /tmp/pose.zip '*/end2end.onnx' > models/rtmlib/rtmpose_m_body7_256x192.onnx   # 51 MB zip
+```
+  Other sizes (zip/task, checked 2026-11-16): MediaPipe lite 5.8 MB, heavy 30.7 MB; rtmlib lightweight = YOLOX-tiny 19 MB + RTMPose-s 21 MB; performance = YOLOX-x 368 MB + RTMPose-x 184 MB. URLs for all modes are in rtmlib's `tools/solution/body.py` (`Body.MODE`).
+- Notebooks are run from `notebooks/` (paths use `Path.cwd().parent` as the project root) and are committed with their outputs, so results can be read on GitHub without running them. Re-run headless: `uv run jupyter nbconvert --to notebook --execute --inplace notebooks/<name>.ipynb`.
 
 ## 3. Recording protocol (fixed camera)
 Goal: clean, comparable clips. Change one thing at a time.

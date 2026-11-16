@@ -13,6 +13,7 @@ Rules: tick items as they are done, with the date. Decisions and findings go in 
 - [x] `uv init` + pin Python 3.12; `uv run python --version` = system 3.12.3, no download (2026-11-16)
 - [x] `uv add` core packages + notebook; `.venv` = 949 MB (2026-11-16)
 - [x] Import check for cv2, mediapipe, rtmlib, onnxruntime: OK, CPU provider (2026-11-16)
+- [x] Model weights (balanced set, 148 MB) in `models/`; package examples in `notebooks/00_package_examples.ipynb` (2026-11-16)
 - [x] Folders: `src/pose_tracker/`, `scripts/`, `notebooks/`, `models/`, `data/derived/` (2026-11-16)
 
 ## M1: Stage 0, stills
