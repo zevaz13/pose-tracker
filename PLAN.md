@@ -17,10 +17,11 @@ Rules: tick items as they are done, with the date. Decisions and findings go in 
 - [x] Folders: `src/pose_tracker/`, `scripts/`, `notebooks/`, `models/`, `data/derived/` (2026-11-16)
 
 ## M1: Stage 0, stills
-- [ ] 6-10 photos: side and front, ready position and backhand contact, fixed camera
+- [x] Shooting protocol written: `docs/stills-protocol.md` (2026-11-16)
+- [ ] ~15 photos per the protocol: side and front, ready and backhand contact, 5 still + 5 repeated shots, tape markers (waiting for good light)
 - [ ] Script: MediaPipe and rtmlib on the same photos, keypoints to CSV in `test-logs/`
-- [ ] Joint angles (elbow, shoulder, trunk, knee); compare with a protractor reading on one static pose
-- [ ] Noise floor: same pose 5 times, jitter between repeats
+- [ ] Joint angles (elbow, shoulder, trunk, knee); compare with angles from the tape-marker centers
+- [ ] Noise floor: spread over 5 still shots vs 5 repeated poses
 - [ ] Stop point: do the models agree within a few degrees? Write findings in `README.md`
 
 ## M2: recording and clip checks

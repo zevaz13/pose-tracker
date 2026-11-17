@@ -38,7 +38,7 @@ One file per stage, so stages can be re-run and compared:
 - One script per stage, driven by command-line arguments.
 
 ## Data
-- Raw photos and clips live in `data/`, named `YYYY-MM-DD_<device>_<fps>fps_<what>_<take>.<ext>`. Never modify or delete them. Do not write outside `data/` without asking.
+- Raw photos and clips live in `data/`, named `YYYY-MM-DD_<device>_<fps>fps_<what>_<take>.<ext>` (stills: `photo` in place of the fps field). Never modify or delete them. Do not write outside `data/` without asking.
 - Regenerable intermediate files go in `data/derived/` (create when first needed). Small results worth keeping (jitter and pixel-error tables, ffprobe outputs, hand labels) go in `test-logs/` with model or device and date in the name.
 - Model weights go in `models/`. Large files (`data/`, `models/`, `.venv/`) are not for git.
 - Raw data location is a per-project decision. Ask before changing it, and discuss how to handle intermediate steps before adding new ones.
