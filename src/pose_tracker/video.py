@@ -1,14 +1,18 @@
 """Per-frame 2D pose on video clips. Output follows the pipeline contract:
 keypoints CSV with columns frame, t_s, joint, x_px, y_px, conf (raw model output)."""
 import csv
+import json
 import subprocess
 import time
+from functools import partial
 
 import cv2
 import numpy as np
 import mediapipe as mp
 
-from .stills import COCO, MP33, MediaPipePose, make_rtmpose, rtmpose_main_person
+from rtmlib import Body, PoseTracker
+
+from .stills import COCO, MP33, DET_MODEL, POSE_MODEL, MediaPipePose, make_rtmpose, rtmpose_main_person
 
 
 def frame_times(path):
@@ -17,6 +21,25 @@ def frame_times(path):
                           "frame=pts_time", "-of", "csv=p=0", str(path)],
                          capture_output=True, text=True, check=True).stdout
     return np.array([float(l.strip(",")) for l in out.split() if l.strip(",")])
+
+
+def capture_fps(path):
+    """Capture frame rate written by Android (`com.android.capture.fps`), or None."""
+    out = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format_tags=com.android.capture.fps",
+                          "-of", "json", str(path)], capture_output=True, text=True, check=True).stdout
+    tag = json.loads(out).get("format", {}).get("tags", {}).get("com.android.capture.fps")
+    return float(tag) if tag else None
+
+
+def real_frame_times(path):
+    """Frame times in real (capture) seconds. Slow-motion files (e.g. 480 fps capture written as a
+    30 fps file) are rescaled so the median frame spacing equals 1 / capture fps; normal clips are
+    returned unchanged."""
+    t = frame_times(path)
+    cap, dt = capture_fps(path), np.median(np.diff(t))
+    if cap and cap * dt > 1.5:
+        t = t / (dt * cap)
+    return t
 
 
 def iter_frames(path):
@@ -30,17 +53,24 @@ def iter_frames(path):
     cap.release()
 
 
-def pose_video(path, model, out_csv):
-    """Run `model` ('mediapipe' or 'rtmpose') on every frame and write the keypoints CSV.
-    MediaPipe runs in VIDEO mode (tracks its ROI between frames, needs increasing timestamps);
-    RTMPose runs YOLOX + RTMPose-m on every frame. Returns per-frame inference times in ms."""
-    t = frame_times(path)
+def pose_video(path, model, out_csv, det_every=1):
+    """Run `model` ('mediapipe' or 'rtmpose') on every frame and write the keypoints CSV (t_s in real
+    time, see `real_frame_times`). MediaPipe runs in VIDEO mode (tracks its ROI between frames, needs
+    increasing timestamps). RTMPose runs YOLOX every `det_every` frames (0 = first frame only); in
+    between, rtmlib's PoseTracker uses a box around the previous frame's keypoints.
+    Returns per-frame times in ms."""
+    t = real_frame_times(path)
     if model == "mediapipe":
         mpp = MediaPipePose(running_mode=mp.tasks.vision.RunningMode.VIDEO)
         names = MP33
         run = lambda im, i: mpp(im, timestamp_ms=int(round(1000 * t[i])))
-    else:
+    elif det_every == 1:
         body = make_rtmpose()
+        names = COCO
+        run = lambda im, i: rtmpose_main_person(body, im)[:2]
+    else:
+        body = PoseTracker(partial(Body, det=str(DET_MODEL), det_input_size=(640, 640), pose=str(POSE_MODEL),
+                                   pose_input_size=(192, 256)), det_frequency=det_every or 10**9, tracking=False)
         names = COCO
         run = lambda im, i: rtmpose_main_person(body, im)[:2]
     ms = []

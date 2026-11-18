@@ -1,0 +1,9 @@
+clip,stroke,model,n,t_peak,v_peak,elbow_at_peak,elbow_min,elbow_max,path
+revesSM,backhand,mediapipe,1,1.285,8.224,nan,89.196,139.978,3.819
+revesSM,backhand,mediapipe,2,2.671,7.376,nan,66.593,179.848,4.392
+revesSM,backhand,mediapipe,3,3.937,8.005,nan,74.191,159.167,4.124
+revesSM,backhand,mediapipe,4,5.537,8.998,nan,62.806,145.488,3.733
+revesSM,backhand,rtmpose_track,1,1.240,6.327,91.712,89.932,135.767,5.960
+revesSM,backhand,rtmpose_track,2,2.606,6.551,75.853,72.086,137.475,6.072
+revesSM,backhand,rtmpose_track,3,3.910,7.574,77.165,76.347,140.297,6.246
+revesSM,backhand,rtmpose_track,4,5.514,7.403,67.139,67.139,145.871,6.112

@@ -1,6 +1,6 @@
 # Pose tracker: plan
 
-Current milestones: **M1, stills** (free-form set done; protocol photos with tape markers pending) and **M3, video** (60 fps clips analyzed; 480 fps next). Last updated 2026-11-18.
+Current milestones: **M1, stills** (free-form set done; protocol photos with tape markers pending) and **M3, video** (60 fps and 480 fps backhand analyzed; forehand slow motion to re-record). Last updated 2026-11-18.
 
 Rules: tick items as they are done, with the date. Decisions and findings go in `README.md`, commands in `docs/WORKFLOW.md`. Ask before any install, `sudo` or deletion.
 
@@ -30,15 +30,18 @@ Rules: tick items as they are done, with the date. Decisions and findings go in 
 - [ ] Test the remote as record start/stop in the realme camera app (volume-button setting, start tone)
 - [ ] Record the same backhand at 30, 60 and 480 fps (tripod)
 - [x] `ffprobe` the first 5 clips: `test-logs/ffprobe_TableTennis1_vids_2026-11-18.txt` (60 fps: 1080p, clean 16.67 ms timing; slow motion: 720p, 480 fps capture written as 30 fps, tighter framing) (2026-11-18)
-- [ ] 480 fps: real or interpolated frames, clip length limit, usable light? (look at consecutive frames)
+- [x] 480 fps is real capture (120 Hz light flicker sampled at 4 independent levels per cycle); light usable but flickers and is noisier (2026-11-18, notebook 04)
+- [ ] Slow-motion clip length limit (not tested)
 - [ ] Record the tablet model and camera specs (optional)
 
 ## M3: Stage 1, video
 - [x] Per-frame keypoints to CSV (`scripts/pose_video.py`), wrist-speed curve (SG derivative), stroke detection, per-stroke metrics, elbow angle over time, consistency plots: `notebooks/03_video_60fps.ipynb` (2026-11-18)
 - [ ] Filter stage writing `keypoints_<model>_filt.csv` (One Euro or SG / RTS)
 - [ ] Side-view clip of forehand and backhand (the front view cannot measure their elbow angle), 10+ strokes each
-- [ ] 480 fps clips through the same notebook (timestamps / 16)
-- [ ] Compare 30 vs 60 vs 480 fps on the same stroke
+- [x] 480 fps clips: `notebooks/04_video_480fps.ipynb`; backhand analyzed, forehand excluded (body out of frame) (2026-11-18)
+- [ ] Re-record the slow-motion forehand with the whole body in frame (720p frame is tighter), 10+ strokes
+- [x] Compare 60 vs 480 fps: decimating 480 fps to 60 fps keeps 79-86 % of the peak wrist speed (2026-11-18)
+- [ ] Compare 30 fps too (optional)
 - [ ] Hand-label ~30 frames, per-keypoint pixel error and PCK per model; choose the model
 - [x] Measured CPU speed per model: MediaPipe VIDEO 21-27 ms/frame, RTMPose + YOLOX every frame 374-446 ms/frame (`test-logs/pose-speed_2026-11-18.csv`) (2026-11-18)
 

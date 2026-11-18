@@ -1,6 +1,6 @@
 # Pose Tracker (table-tennis strokes from phone video)
 
-Status: environment ready (2026-11-16). First own photos and 60 fps clips measured (2026-11-18, model agreement and stroke metrics; no ground truth yet). Part of the HobbyProjects backlog (section 8 in `hobby-ideas-backlog.md` in the Claude Project). Setup and run commands are in `docs/WORKFLOW.md`.
+Status: environment ready (2026-11-16). First own photos, 60 fps and 480 fps clips measured (2026-11-18, model agreement and stroke metrics; no ground truth yet). Part of the HobbyProjects backlog (section 8 in `hobby-ideas-backlog.md` in the Claude Project). Setup and run commands are in `docs/WORKFLOW.md`.
 
 Legend: **[assumed]** = from literature or reasoning, not measured by me. **[verified]** = measured, with raw data in `test-logs/`. Everything below is [assumed] until a test log says otherwise.
 
@@ -46,7 +46,7 @@ A **stroke analyzer**, run offline on the computer. Input: a clip (or photo) fro
 - Gyro-EIS / stabilization may crop or warp frames even on a tripod: turn it off for test clips if the app allows. [assumed]
 
 ## Open questions
-- Phone (GT Neo 3): 60 fps at 1080p and 480 fps capture at 720p are confirmed in the file metadata (2026-11-18). Still open: are the 480 fps frames real or interpolated, clip length limit, and is 480 fps usable in this light?
+- Phone (GT Neo 3): 60 fps at 1080p and real 480 fps capture at 720p confirmed (2026-11-18). Still open: slow-motion clip length limit.
 - Does the realme camera app start/stop video recording with the Volume Up key (check its volume-button setting), and is there an audible start/stop tone? (Pairing with the phone is done; tablet Bluetooth is off while the phone is in use.)
 - Tablet camera: model, max fps and resolution?
 - Measured CPU speed: frames/s for MediaPipe and RTMPose on this i7-1165G7 (first Stage 0/1 benchmark), and whether SAM 2 (tiny) is usable on CPU.
@@ -91,6 +91,12 @@ Skim for the API shape and the gotchas, then build. Do not read ahead of the sta
 - Oxford comparison (MediaPipe, OpenPose, RTMPose, ViTPose, ...; infant video): https://ora.ox.ac.uk/objects/uuid:ff7ad4b5-3e9f-4d71-819d-15d19154a947/files/rhx11xh38d
 
 ## Log
+- 2026-11-18: 480 fps clips analyzed (`notebooks/04_video_480fps.ipynb`). Analysis code moved to `src/pose_tracker/strokes.py` (shared with notebook 03; its stroke table is identical after the move). `scripts/pose_video.py` gained `--det-every N` (0 = person detector on the first frame only) and writes real-time `t_s` for slow motion. Findings [verified, these clips]:
+  - 480 fps is real capture: the room light flickers at 120 Hz and the frames sample four independent brightness levels per cycle (interpolation from 120 or 240 fps cannot do that). Brightness swings about ±3 grey levels with a 4-frame period: colour/difference methods must normalize per frame. Not visible at 60 fps.
+  - Forehand slow-motion clip unusable for pose: the body is at the right edge of the tighter 720p frame (torso, hips, legs out of frame most of the time); MediaPipe loses the person in 23 % of frames; speeds come out at 20-48 torso/s. To re-record.
+  - RTMPose detector on the first frame only (box follows the skeleton) matches detector-every-frame within about 1 % of torso length, at 28-31 vs 379 ms per frame. Decision: use it for single-person clips.
+  - Backhand at 480 fps: 4 strokes, peak wrist speed 7.0 ± 0.5 (RTMPose) / 8.2 ± 0.6 (MediaPipe) torso/s with SG 52 ms. Decimated to 60 fps with the notebook 03 analysis, 79-86 % of the peak remains; most of the loss is the 150 ms window that 60 fps needs. Elbow changes about 1.1 deg/frame at the peak (vs about 10 at 60 fps). The paddle is sharp at 480 fps and a smear at 60 fps; the RTMPose wrist score no longer drops with speed.
+  - Wrist path length sums jitter and grows with frame rate (6 vs 3.4 torso lengths): needs smoothed positions (filter stage).
 - 2026-11-18: 60 fps clips analyzed (`notebooks/03_video_60fps.ipynb`; front view, chop / forehand / backhand, 5 strokes each). Code: `src/pose_tracker/video.py`, CLI `scripts/pose_video.py` (pipeline stage "pose"). Findings [verified, these clips]:
   - Files [verified, `test-logs/ffprobe_TableTennis1_vids_2026-11-18.txt`]: 8-bit SDR H.264, full range (`yuvj420p`), BT.601 matrix, rotation -90; no colour filter in the data. The "filter" look seen on the PC is probably the player mis-handling full range or rotation [assumed]. 60 fps clips: 1920x1080, 16.67 ms spacing, no dropped frames. Slow motion: 1280x720, 480 fps capture (`com.android.capture.fps`) written as a 30 fps file (16x stretched; real length = frames / 480), tighter framing (head and feet cut).
   - Speed: MediaPipe VIDEO mode 21-27 ms/frame; RTMPose + YOLOX on every frame 374-446 ms/frame (`test-logs/pose-speed_2026-11-18.csv`).
