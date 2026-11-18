@@ -1,6 +1,6 @@
 # Pose tracker: plan
 
-Current milestone: **M0, environment** (done except the reading list; next: M1 stills). Last updated 2026-11-16.
+Current milestone: **M1, stills** (free-form set done; protocol photos with tape markers pending). Last updated 2026-11-18.
 
 Rules: tick items as they are done, with the date. Decisions and findings go in `README.md`, commands in `docs/WORKFLOW.md`. Ask before any install, `sudo` or deletion.
 
@@ -18,8 +18,10 @@ Rules: tick items as they are done, with the date. Decisions and findings go in 
 
 ## M1: Stage 0, stills
 - [x] Shooting protocol written: `docs/stills-protocol.md` (2026-11-16)
+- [x] Free-form set `data/TableTennis1/` (17 photos, no markers): both models on all photos, keypoints and angles to `test-logs/`, skeleton overlays; `notebooks/02_tabletennis1_all_stills.ipynb` (2026-11-18)
+- [x] Walkthrough on one photo: how each toolbox is called, crop/resolution, angle conditioning, timing; `notebooks/01_single_still_walkthrough.ipynb` (2026-11-18)
 - [ ] ~15 photos per the protocol: side and front, ready and backhand contact, 5 still + 5 repeated shots, tape markers (waiting for good light)
-- [ ] Script: MediaPipe and rtmlib on the same photos, keypoints to CSV in `test-logs/`
+- [ ] Script: MediaPipe and rtmlib on the same photos, keypoints to CSV in `test-logs/` (shared code done in `src/pose_tracker/stills.py`; CLI in `scripts/` still to write)
 - [ ] Joint angles (elbow, shoulder, trunk, knee); compare with angles from the tape-marker centers
 - [ ] Noise floor: spread over 5 still shots vs 5 repeated poses
 - [ ] Stop point: do the models agree within a few degrees? Write findings in `README.md`
