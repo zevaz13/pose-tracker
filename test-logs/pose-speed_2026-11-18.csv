@@ -1,0 +1,7 @@
+clip,model,frames,total_s,median_ms,min_ms,median_ms_excl_first
+reves60.mp4,mediapipe,372,10.3,27.0,23.2,27.0
+chop60.mp4,mediapipe,505,11.3,22.0,19.4,22.0
+derecha60.mp4,mediapipe,421,9.2,21.1,19.4,21.1
+chop60.mp4,rtmpose,505,226.0,445.6,264.3,445.6
+derecha60.mp4,rtmpose,421,161.4,374.3,339.7,374.3
+reves60.mp4,rtmpose,372,152.3,376.5,308.4,376.5

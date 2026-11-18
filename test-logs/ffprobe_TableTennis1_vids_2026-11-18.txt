@@ -1,0 +1,5 @@
+chop60.mp4       h264 1920x1080 rot  -90 yuvj420p range=pc matrix=bt470bg transfer=bt709 | file fps  59.94, capture fps    60 | 505 frames, file    8.4 s, real  8.42 s
+derecha60.mp4    h264 1920x1080 rot  -90 yuvj420p range=pc matrix=bt470bg transfer=bt709 | file fps  59.94, capture fps    60 | 421 frames, file    7.0 s, real  7.02 s
+derechasSM.mp4   h264 1280x720 rot  -90 yuvj420p range=pc matrix=bt470bg transfer=bt709 | file fps  29.97, capture fps   480 | 5661 frames, file  188.9 s, real 11.79 s
+reves60.mp4      h264 1920x1080 rot  -90 yuvj420p range=pc matrix=bt470bg transfer=bt709 | file fps  59.94, capture fps    60 | 372 frames, file    6.2 s, real  6.20 s
+revesSM.mp4      h264 1280x720 rot  -90 yuvj420p range=pc matrix=bt470bg transfer=bt709 | file fps  29.97, capture fps   480 | 3056 frames, file  102.0 s, real  6.37 s

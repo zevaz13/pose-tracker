@@ -1,6 +1,6 @@
 # Pose tracker: plan
 
-Current milestone: **M1, stills** (free-form set done; protocol photos with tape markers pending). Last updated 2026-11-18.
+Current milestones: **M1, stills** (free-form set done; protocol photos with tape markers pending) and **M3, video** (60 fps clips analyzed; 480 fps next). Last updated 2026-11-18.
 
 Rules: tick items as they are done, with the date. Decisions and findings go in `README.md`, commands in `docs/WORKFLOW.md`. Ask before any install, `sudo` or deletion.
 
@@ -29,14 +29,18 @@ Rules: tick items as they are done, with the date. Decisions and findings go in 
 ## M2: recording and clip checks
 - [ ] Test the remote as record start/stop in the realme camera app (volume-button setting, start tone)
 - [ ] Record the same backhand at 30, 60 and 480 fps (tripod)
-- [ ] `ffprobe` every clip, log in `data/clips.csv`: is 480 fps real, clip length limit, crop, usable light?
+- [x] `ffprobe` the first 5 clips: `test-logs/ffprobe_TableTennis1_vids_2026-11-18.txt` (60 fps: 1080p, clean 16.67 ms timing; slow motion: 720p, 480 fps capture written as 30 fps, tighter framing) (2026-11-18)
+- [ ] 480 fps: real or interpolated frames, clip length limit, usable light? (look at consecutive frames)
 - [ ] Record the tablet model and camera specs (optional)
 
 ## M3: Stage 1, video
-- [ ] Per-frame keypoints to CSV, filter (One Euro or Savitzky-Golay), wrist-speed curve, elbow angle over time
+- [x] Per-frame keypoints to CSV (`scripts/pose_video.py`), wrist-speed curve (SG derivative), stroke detection, per-stroke metrics, elbow angle over time, consistency plots: `notebooks/03_video_60fps.ipynb` (2026-11-18)
+- [ ] Filter stage writing `keypoints_<model>_filt.csv` (One Euro or SG / RTS)
+- [ ] Side-view clip of forehand and backhand (the front view cannot measure their elbow angle), 10+ strokes each
+- [ ] 480 fps clips through the same notebook (timestamps / 16)
 - [ ] Compare 30 vs 60 vs 480 fps on the same stroke
 - [ ] Hand-label ~30 frames, per-keypoint pixel error and PCK per model; choose the model
-- [ ] Measured CPU speed (frames/s) per model
+- [x] Measured CPU speed per model: MediaPipe VIDEO 21-27 ms/frame, RTMPose + YOLOX every frame 374-446 ms/frame (`test-logs/pose-speed_2026-11-18.csv`) (2026-11-18)
 
 ## M4: Stage 2, paddle
 - [ ] Colored tape + HSV segmentation: centroid and blade angle

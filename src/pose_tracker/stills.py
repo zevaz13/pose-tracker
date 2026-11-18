@@ -34,18 +34,20 @@ def load_image(path, long_side=None):
 
 
 class MediaPipePose:
-    """Pose Landmarker in IMAGE mode (each call independent, no tracking between images)."""
+    """Pose Landmarker. IMAGE mode: each call independent. VIDEO mode: tracks the ROI between frames,
+    each call needs a strictly increasing `timestamp_ms`."""
 
-    def __init__(self, model=MP_MODEL, num_poses=1):
+    def __init__(self, model=MP_MODEL, num_poses=1, running_mode=vision.RunningMode.IMAGE):
         opts = vision.PoseLandmarkerOptions(base_options=BaseOptions(model_asset_path=str(model)),
-                                            running_mode=vision.RunningMode.IMAGE, num_poses=num_poses)
+                                            running_mode=running_mode, num_poses=num_poses)
         self.landmarker = vision.PoseLandmarker.create_from_options(opts)
 
-    def __call__(self, bgr):
+    def __call__(self, bgr, timestamp_ms=None):
         """Returns (xy33 in px, visibility33), or NaNs if no person is found."""
         h, w = bgr.shape[:2]
-        rgb = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
-        res = self.landmarker.detect(mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb))
+        image = mp.Image(image_format=mp.ImageFormat.SRGB, data=cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB))
+        res = (self.landmarker.detect(image) if timestamp_ms is None
+               else self.landmarker.detect_for_video(image, timestamp_ms))
         if not res.pose_landmarks:
             return np.full((33, 2), np.nan), np.full(33, np.nan)
         lm = res.pose_landmarks[0]

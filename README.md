@@ -1,6 +1,6 @@
 # Pose Tracker (table-tennis strokes from phone video)
 
-Status: environment ready (2026-11-16). First own photos measured (2026-11-18, free-form set, model agreement only; no ground truth yet). Part of the HobbyProjects backlog (section 8 in `hobby-ideas-backlog.md` in the Claude Project). Setup and run commands are in `docs/WORKFLOW.md`.
+Status: environment ready (2026-11-16). First own photos and 60 fps clips measured (2026-11-18, model agreement and stroke metrics; no ground truth yet). Part of the HobbyProjects backlog (section 8 in `hobby-ideas-backlog.md` in the Claude Project). Setup and run commands are in `docs/WORKFLOW.md`.
 
 Legend: **[assumed]** = from literature or reasoning, not measured by me. **[verified]** = measured, with raw data in `test-logs/`. Everything below is [assumed] until a test log says otherwise.
 
@@ -46,7 +46,7 @@ A **stroke analyzer**, run offline on the computer. Input: a clip (or photo) fro
 - Gyro-EIS / stabilization may crop or warp frames even on a tripod: turn it off for test clips if the app allows. [assumed]
 
 ## Open questions
-- Phone (GT Neo 3): does the camera app really record 60 fps at 1080p and 480 fps at 720p? In the files (ffprobe, `docs/WORKFLOW.md` section 4): real frame rate, clip length limit, crop, and does 480 fps look usable under the lighting available (exposure is at most 1/480 s)?
+- Phone (GT Neo 3): 60 fps at 1080p and 480 fps capture at 720p are confirmed in the file metadata (2026-11-18). Still open: are the 480 fps frames real or interpolated, clip length limit, and is 480 fps usable in this light?
 - Does the realme camera app start/stop video recording with the Volume Up key (check its volume-button setting), and is there an audible start/stop tone? (Pairing with the phone is done; tablet Bluetooth is off while the phone is in use.)
 - Tablet camera: model, max fps and resolution?
 - Measured CPU speed: frames/s for MediaPipe and RTMPose on this i7-1165G7 (first Stage 0/1 benchmark), and whether SAM 2 (tiny) is usable on CPU.
@@ -91,6 +91,13 @@ Skim for the API shape and the gotchas, then build. Do not read ahead of the sta
 - Oxford comparison (MediaPipe, OpenPose, RTMPose, ViTPose, ...; infant video): https://ora.ox.ac.uk/objects/uuid:ff7ad4b5-3e9f-4d71-819d-15d19154a947/files/rhx11xh38d
 
 ## Log
+- 2026-11-18: 60 fps clips analyzed (`notebooks/03_video_60fps.ipynb`; front view, chop / forehand / backhand, 5 strokes each). Code: `src/pose_tracker/video.py`, CLI `scripts/pose_video.py` (pipeline stage "pose"). Findings [verified, these clips]:
+  - Files [verified, `test-logs/ffprobe_TableTennis1_vids_2026-11-18.txt`]: 8-bit SDR H.264, full range (`yuvj420p`), BT.601 matrix, rotation -90; no colour filter in the data. The "filter" look seen on the PC is probably the player mis-handling full range or rotation [assumed]. 60 fps clips: 1920x1080, 16.67 ms spacing, no dropped frames. Slow motion: 1280x720, 480 fps capture (`com.android.capture.fps`) written as a 30 fps file (16x stretched; real length = frames / 480), tighter framing (head and feet cut).
+  - Speed: MediaPipe VIDEO mode 21-27 ms/frame; RTMPose + YOLOX on every frame 374-446 ms/frame (`test-logs/pose-speed_2026-11-18.csv`).
+  - Stroke detection on wrist speed (SG derivative, 9 frames, order 2; peaks 0.6 s apart, prominence 2 torso/s, height >= 0.6 x the clip's 99th percentile) finds 5 strokes per clip with both models; peak times agree within 0.05 s. Without the height rule, backswing peaks were counted as strokes.
+  - Peak wrist speed (lower bound): chop 7.6-8.1, forehand 6.5-7.0, backhand 6.9-7.9 torso/s; 5-8 % spread over strokes (`test-logs/strokes_TableTennis1_60fps_2026-11-18.csv`).
+  - Elbow angle from the front view works for the chop but not for forehand/backhand (33-41 % of frames foreshortened; the forehand follow-through projects to about 0 deg). Decision: forehand/backhand elbow needs a side view. "Elbow at peak speed" changes about 10 deg per frame at 60 fps: fragile metric.
+  - Motion blur: the model gap at the wrist grows from 4-5 % to 6-10 % of torso in the fastest 10 % of frames, and the RTMPose wrist score drops (0.92 to 0.76 for the chop).
 - 2026-11-18: Free-form photo set `data/TableTennis1/` (17 JPEGs, realme GT Neo 3, 3072x4096, EXIF orientation 0, original phone names kept; not the protocol shot list, no markers). Notebooks `01_single_still_walkthrough.ipynb` (one photo, step by step) and `02_tabletennis1_all_stills.ipynb` (all photos); shared code in `src/pose_tracker/stills.py`. Outputs: `test-logs/keypoints_{mediapipe,rtmpose-m}_TableTennis1_2026-11-18.csv`, `test-logs/angles_TableTennis1_2026-11-18.csv`, overlays in `data/derived/TableTennis1/`. Findings [verified, this set only; agreement, not accuracy]:
   - Both models find exactly one person in all 17 photos. Per-photo median disagreement 2.5-9.9 % of torso length. Worst: back to camera with the body cut by the frame edge (#06), head down with the paddle hand at the face (#04), and body partly out of frame (#00, #07; missing joints are hallucinated). Ears and hips differ most consistently between models (7-10 %, 5-7 %): keypoint definitions.
   - Image-plane angles: median model difference 2.4-6.1 deg per joint, but 20-41 deg on single photos. Angles with a foreshortened segment (< 0.3 torso in the image) are ill-conditioned: e.g. left elbow 50 vs 20 deg with a 45 px forearm. Decision: flag such angles rather than report them.
