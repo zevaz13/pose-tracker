@@ -1,6 +1,6 @@
 # Pose tracker: plan
 
-Current milestones: **M1, stills** (free-form set done; protocol photos with tape markers pending) and **M3, video** (60 fps and 480 fps backhand analyzed; forehand slow motion to re-record). Last updated 2026-11-18.
+Current milestones: **M1, stills** (free-form set done; protocol photos with tape markers pending) and **M3, video** (60 fps and 480 fps backhand analyzed; forehand slow motion to re-record). Last updated 2026-11-19.
 
 Rules: tick items as they are done, with the date. Decisions and findings go in `README.md`, commands in `docs/WORKFLOW.md`. Ask before any install, `sudo` or deletion.
 
@@ -36,6 +36,7 @@ Rules: tick items as they are done, with the date. Decisions and findings go in 
 
 ## M3: Stage 1, video
 - [x] Per-frame keypoints to CSV (`scripts/pose_video.py`), wrist-speed curve (SG derivative), stroke detection, per-stroke metrics, elbow angle over time, consistency plots: `notebooks/03_video_60fps.ipynb` (2026-11-18)
+- [x] Feet: l_ankle vs r_ankle over time per 60 fps clip, notebook 03 section 9 (forehand left foot out of frame) (2026-11-19)
 - [ ] Filter stage writing `keypoints_<model>_filt.csv` (One Euro or SG / RTS)
 - [ ] Side-view clip of forehand and backhand (the front view cannot measure their elbow angle), 10+ strokes each
 - [x] 480 fps clips: `notebooks/04_video_480fps.ipynb`; backhand analyzed, forehand excluded (body out of frame) (2026-11-18)

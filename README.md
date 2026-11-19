@@ -91,6 +91,10 @@ Skim for the API shape and the gotchas, then build. Do not read ahead of the sta
 - Oxford comparison (MediaPipe, OpenPose, RTMPose, ViTPose, ...; infant video): https://ora.ox.ac.uk/objects/uuid:ff7ad4b5-3e9f-4d71-819d-15d19154a947/files/rhx11xh38d
 
 ## Log
+- 2026-11-19: Feet in the 60 fps clips: notebook 03 section 9 plots l_ankle vs r_ankle over time (x, y, score; both models; stroke peaks marked), figures in `data/derived/TableTennis1/vids/<clip>_ankles.png`. Findings [verified, these clips; front view, image px]:
+  - Backhand: two outward steps of the left foot (~1.0 and 2.2 s), one right-foot step at ~3.4 s (~50 px x, ~90 px up in the image, probably away from the camera [assumed]), then a fixed stance. Models agree within ~10-20 px.
+  - Chop: feet planted (x moves < 10 px after 0.3 s). The 10-40 px y wobble differs between models: noise level, not footwork.
+  - Forehand: left ankle outside the 1080 px frame in 52 % of frames (RTMPose median score 0.38), so the left-foot trace is guessed. Right foot tracked and nearly still. Footwork needs both feet in frame, and a side view for the weight shift.
 - 2026-11-18: 480 fps clips analyzed (`notebooks/04_video_480fps.ipynb`). Analysis code moved to `src/pose_tracker/strokes.py` (shared with notebook 03; its stroke table is identical after the move). `scripts/pose_video.py` gained `--det-every N` (0 = person detector on the first frame only) and writes real-time `t_s` for slow motion. Findings [verified, these clips]:
   - 480 fps is real capture: the room light flickers at 120 Hz and the frames sample four independent brightness levels per cycle (interpolation from 120 or 240 fps cannot do that). Brightness swings about ±3 grey levels with a 4-frame period: colour/difference methods must normalize per frame. Not visible at 60 fps.
   - Forehand slow-motion clip unusable for pose: the body is at the right edge of the tighter 720p frame (torso, hips, legs out of frame most of the time); MediaPipe loses the person in 23 % of frames; speeds come out at 20-48 torso/s. To re-record.
