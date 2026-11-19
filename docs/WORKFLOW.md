@@ -107,6 +107,10 @@ uv run python scripts/pose_video.py data/TableTennis1/vids/*60.mp4 --model rtmpo
 uv run jupyter nbconvert --to notebook --execute --inplace notebooks/03_video_60fps.ipynb   # analysis, about 2 min once keypoints exist
 ```
 Writes `data/derived/<clip folder>/<clip>_keypoints_<model>.csv`, appends speed to `test-logs/pose-speed_<date>.csv`; the notebook writes `test-logs/strokes_*.csv` and `data/derived/.../<clip>_annotated.mp4` (H.264, standard range, plays anywhere).
+MediaPipe's 33 landmarks, numbered, drawn on a clip (needs its `_keypoints_mediapipe.csv`; writes `<clip>_mediapipe33.mp4` next to it):
+```
+uv run python scripts/render_mediapipe33.py data/TableTennis1/vids/reves60.mp4
+```
 Slow motion (480 fps, about 9,000 frames per 10 s): run RTMPose with the person detector on the first frame only (`--det-every 0`, about 30 ms/frame; matches detector-every-frame within about 1 % torso, notebook 04 section 4). `t_s` is written in real time.
 ```
 uv run python scripts/pose_video.py data/TableTennis1/vids/*SM.mp4 --model rtmpose --det-every 0

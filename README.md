@@ -91,6 +91,7 @@ Skim for the API shape and the gotchas, then build. Do not read ahead of the sta
 - Oxford comparison (MediaPipe, OpenPose, RTMPose, ViTPose, ...; infant video): https://ora.ox.ac.uk/objects/uuid:ff7ad4b5-3e9f-4d71-819d-15d19154a947/files/rhx11xh38d
 
 ## Log
+- 2026-11-19: `scripts/render_mediapipe33.py`: draws MediaPipe's 33 numbered landmarks (hands, heels, toes included) from the existing keypoints CSV onto a clip. Backhand rendered to `data/derived/TableTennis1/vids/reves60_mediapipe33.mp4` (372 frames, same as the source). Visual check: the hand points (18/20/22) sit on the motion-blurred paddle hand at stroke speed.
 - 2026-11-19: Feet in the 60 fps clips: notebook 03 section 9 plots l_ankle vs r_ankle over time (x, y, score; both models; stroke peaks marked), figures in `data/derived/TableTennis1/vids/<clip>_ankles.png`. Findings [verified, these clips; front view, image px]:
   - Backhand: two outward steps of the left foot (~1.0 and 2.2 s), one right-foot step at ~3.4 s (~50 px x, ~90 px up in the image, probably away from the camera [assumed]), then a fixed stance. Models agree within ~10-20 px.
   - Chop: feet planted (x moves < 10 px after 0.3 s). The 10-40 px y wobble differs between models: noise level, not footwork.
