@@ -37,6 +37,7 @@ Rules: tick items as they are done, with the date. Decisions and findings go in 
 ## M3: Stage 1, video
 - [x] Per-frame keypoints to CSV (`scripts/pose_video.py`), wrist-speed curve (SG derivative), stroke detection, per-stroke metrics, elbow angle over time, consistency plots: `notebooks/03_video_60fps.ipynb` (2026-11-18)
 - [x] Feet: l_ankle vs r_ankle over time per 60 fps clip, notebook 03 section 9 (forehand left foot out of frame) (2026-11-19)
+- [x] Backhand, MediaPipe only: wrist speed, wrist paths, ankles in `notebooks/05_backhand_mediapipe.ipynb` (2026-11-19)
 - [ ] Filter stage writing `keypoints_<model>_filt.csv` (One Euro or SG / RTS)
 - [ ] Side-view clip of forehand and backhand (the front view cannot measure their elbow angle), 10+ strokes each
 - [x] 480 fps clips: `notebooks/04_video_480fps.ipynb`; backhand analyzed, forehand excluded (body out of frame) (2026-11-18)

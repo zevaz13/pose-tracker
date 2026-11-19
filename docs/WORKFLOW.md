@@ -105,6 +105,7 @@ Pose stage (raw keypoints per frame, time from the container's frame timestamps)
 uv run python scripts/pose_video.py data/TableTennis1/vids/*60.mp4 --model mediapipe   # about 25 ms/frame
 uv run python scripts/pose_video.py data/TableTennis1/vids/*60.mp4 --model rtmpose     # about 0.4 s/frame, run in the background
 uv run jupyter nbconvert --to notebook --execute --inplace notebooks/03_video_60fps.ipynb   # analysis, about 2 min once keypoints exist
+uv run jupyter nbconvert --to notebook --execute --inplace notebooks/05_backhand_mediapipe.ipynb   # backhand, MediaPipe only, a few seconds
 ```
 Writes `data/derived/<clip folder>/<clip>_keypoints_<model>.csv`, appends speed to `test-logs/pose-speed_<date>.csv`; the notebook writes `test-logs/strokes_*.csv` and `data/derived/.../<clip>_annotated.mp4` (H.264, standard range, plays anywhere).
 MediaPipe's 33 landmarks, numbered, drawn on a clip (needs its `_keypoints_mediapipe.csv`; writes `<clip>_mediapipe33.mp4` next to it):
